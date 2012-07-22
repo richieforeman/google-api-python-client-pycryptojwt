@@ -7,8 +7,8 @@ from PyCryptoSignedJWT import PyCryptoSignedJwtAssertionCredentials
 
 KEY = "privatekey.pem"
 SCOPES = ["https://www.googleapis.com/auth/drive"]
-CLIENT_ID = "89576170682-1v4a6kh1l382akel7fs89an8q6kna61u.apps.googleusercontent.com"
-SERVICE_ACCOUNT = '89576170682-1v4a6kh1l382akel7fs89an8q6kna61u@developer.gserviceaccount.com'
+CLIENT_ID = "***"
+SERVICE_ACCOUNT = '***'
 
 def main():
     key = open(KEY).read()
