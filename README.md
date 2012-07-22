@@ -15,6 +15,10 @@ AppEngine
 ------
 AppEngine currently supports PyCrypto version 2.3.  However, Crypto.Signature was added in 2.6.  Hopefully this POC and the potentially surrounding community interest will plead our case for PyCrypto 2.6 support in AppEngine
 
+Requirements
+------
+* PyCrypto >= 2.6
+
 Preliminary Setup
 ------
 
