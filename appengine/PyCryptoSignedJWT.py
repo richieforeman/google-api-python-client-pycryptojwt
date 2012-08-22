@@ -1,25 +1,31 @@
 __author__ = "Richie Foreman <richie.foreman@gmail.com>"
 
 import os
-from Crypto.Signature import PKCS1_v1_5
-from Crypto.Hash import SHA256
-from Crypto.PublicKey import RSA
-from oauth2client.client import AssertionCredentials
-from oauth2client.client import MemoryCache
-# oauth2client.crypt should be refactored to not expect openssl
-# from oauth2client.crypt import make_signed_jwt
-# from oauth2client.crypt import _urlsafe_b64encode
-from oauth2client.client import _urlsafe_b64decode
 import time
 import logging
 import httplib2
 import json
 import base64
 
-CLOCK_SKEW_SECS = 300  # 5 minutes in seconds
-AUTH_TOKEN_LIFETIME_SECS = 300  # 5 minutes in seconds
-MAX_TOKEN_LIFETIME_SECS = 86400  # 1 day in seconds
-ID_TOKEN_VERIFICATON_CERTS = 'https://www.googleapis.com/oauth2/v1/certs'
+try:
+    from Crypto.Signature import PKCS1_v1_5
+    from Crypto.Hash import SHA256
+    from Crypto.PublicKey import RSA
+except:
+    ImportError("You need to enable or install PyCrypto, if you're in AppEngine you need to declare it in app.yaml.  There's also a bug that prevents this from currently working in dev_appserver: http://code.google.com/p/googleappengine/issues/detail?id=7998")
+
+from oauth2client.client import AssertionCredentials
+from oauth2client.client import MemoryCache
+# why is the decoder in oauth2client.client -- and the encoder in oauth2client.crypt?
+from oauth2client.client import _urlsafe_b64decode
+
+# oauth2client.crypt should be refactored to not expect openssl
+# from oauth2client.crypt import make_signed_jwt
+# from oauth2client.crypt import _urlsafe_b64encode
+# from oauth2client.crypt import _json_encode
+
+def _json_encode(data):
+    return json.dumps(data, separators = (',', ':'))
 
 def _urlsafe_b64encode(raw_bytes):
     return base64.urlsafe_b64encode(raw_bytes).rstrip('=')
@@ -51,6 +57,11 @@ def make_signed_jwt(signer, payload):
 
     return '.'.join(segments)
 
+
+CLOCK_SKEW_SECS = 300  # 5 minutes in seconds
+AUTH_TOKEN_LIFETIME_SECS = 300  # 5 minutes in seconds
+MAX_TOKEN_LIFETIME_SECS = 86400  # 1 day in seconds
+ID_TOKEN_VERIFICATON_CERTS = 'https://www.googleapis.com/oauth2/v1/certs'
 
 class AppIdentityError(Exception):
     pass
