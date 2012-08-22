@@ -11,13 +11,19 @@ Why?
 -------
 google-api-python-client's SignedJWTAssertionCredentials expects both a PKCS12 key, and an OpenSSL environment.   PyCrypto does not play nicely with PKCS12 certs -- yet. This project ports SignedJWTAssertionCredentials to play nicely with PyCrypto and PEM Keys.
 
+oauth2client merging
+-------
+I hope this code can merge into oauth2client.  oauth2client.crypt currently expects openssl, but there's a fair amount of overlap on some simple methods (base64 encoding, etc)
+
 AppEngine
 ------
-AppEngine currently supports PyCrypto version 2.3.  However, Crypto.Signature was added in 2.6.  Hopefully this POC and the potentially surrounding community interest will plead our case for PyCrypto 2.6 support in AppEngine
+Yes, this works on AppEngine, but there's a bug on dev_appserver.py that prevents this from working on dev:
+http://code.google.com/p/googleappengine/issues/detail?id=7998
 
 Requirements
 ------
 * PyCrypto >= 2.6
+* AppEngine SDK >= 1.7.1
 
 Preliminary Setup
 ------
@@ -33,10 +39,8 @@ Key Conversion
 We need to convert our PKCS12 cert into a PEM private key
 
 ```
-#!/bin/bash
 openssl pkcs12 -passin pass:notasecret -in privatekey.p12 -nocerts -passout pass:notasecret -out key.pem
-# this next line is kind of odd -- but the key is exported with some metadata at the beginning that PyCrypto can't digest.
-tail -n +5 key.pem > privatekey.pem
+openssl pkcs8 -nocrypt -in key.pem -passin pass:notasecret -topk8 -out privatekey.pem
 rm key.pem
 ```
 

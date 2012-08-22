@@ -24,6 +24,7 @@ from apiclient.http import HttpMockSequence
 from oauth2client.anyjson import simplejson
 from oauth2client.client import Credentials
 
+from oauth2client.client import _urlsafe_b64decode
 from PyCryptoSignedJWT import PyCryptoSignedJwtAssertionCredentials
 from PyCryptoSignedJWT import PyCryptoSigner
 from PyCryptoSignedJWT import PyCryptoVerifier
@@ -47,12 +48,13 @@ def datafile(filename):
 class CryptTests(unittest.TestCase):
 
     def test_sign_and_verify(self):
-        private_key = datafile('p8key.pem')
-        public_key = datafile('p8key.pem')
+        private_key = datafile('privatekey.pem')
+        public_key = datafile('privatekey.pem')
 
         signer = PyCryptoSigner.from_string(private_key)
         signature = signer.sign('foo')
         self.assertIsNot(False, signature)
+        print signature
 
         #verifier = crypt.Verifier.from_string(public_key, True)
 
@@ -76,7 +78,7 @@ class CryptTests(unittest.TestCase):
             self.assertTrue((expected_error in msg))
 
     def _create_signed_jwt(self):
-        private_key = datafile('p8key.pem')
+        private_key = datafile('privatekey.pem')
 
 
         signer = PyCryptoSigner.from_string(private_key)
@@ -111,7 +113,7 @@ class CryptTests(unittest.TestCase):
         pass
 
     def test_verify_id_token_bad_tokens(self):
-        private_key = datafile('p8key.pem')
+        private_key = datafile('privatekey.pem')
 
         # Wrong number of segments
         self._check_jwt_failure('foo', 'Wrong number of segments in token: foo')
@@ -170,7 +172,7 @@ class CryptTests(unittest.TestCase):
 class SignedJwtAssertionCredentialsTests(unittest.TestCase):
 
     def test_credentials_good(self):
-        private_key = datafile('p8key.pem')
+        private_key = datafile('privatekey.pem')
         credentials = PyCryptoSignedJwtAssertionCredentials(
             'some_account@example.com',
             private_key,
@@ -185,7 +187,7 @@ class SignedJwtAssertionCredentialsTests(unittest.TestCase):
         self.assertEqual('Bearer 1/3w', content['Authorization'])
 
     def test_credentials_to_from_json(self):
-        private_key = datafile('p8key.pem')
+        private_key = datafile('privatekey.pem')
         credentials = PyCryptoSignedJwtAssertionCredentials(
             'some_account@example.com',
             private_key,
@@ -212,7 +214,7 @@ class SignedJwtAssertionCredentialsTests(unittest.TestCase):
         return content
 
     def test_credentials_refresh_without_storage(self):
-        private_key = datafile('p8key.pem')
+        private_key = datafile('privatekey.pem')
         credentials = PyCryptoSignedJwtAssertionCredentials(
             'some_account@example.com',
             private_key,
@@ -224,7 +226,7 @@ class SignedJwtAssertionCredentialsTests(unittest.TestCase):
         self.assertEqual('Bearer 3/3w', content["Authorization"])
 
     def test_credentials_refresh_with_storage(self):
-        private_key = datafile('p8key.pem')
+        private_key = datafile('privatekey.pem')
         credentials = PyCryptoSignedJwtAssertionCredentials(
             'some_account@example.com',
             private_key,
