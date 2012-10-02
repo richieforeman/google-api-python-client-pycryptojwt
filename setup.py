@@ -14,7 +14,10 @@ setup(name='PyCryptoSignedJWT',
      author_email='chris@xlevus.net',
      url='http://github.com/xlevus/google-api-python-client-pycryptojwt',
      py_modules = ['PyCryptoSignedJWT'],
-     install_requires = ['PyCrypto>=2.6'],
+
+     # Should be provided by appengine. Defining this here sorta breaks
+     # fabengine
+     #install_requires = ['PyCrypto>=2.6'],
      classifiers=[
      ],
      keywords='appengine pycrypto google-api',
