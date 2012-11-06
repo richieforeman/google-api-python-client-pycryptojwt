@@ -13,17 +13,16 @@ google-api-python-client's SignedJWTAssertionCredentials expects both a PKCS12 k
 
 oauth2client merging
 -------
-I hope this code can merge into oauth2client.  oauth2client.crypt currently expects openssl, but there's a fair amount of overlap on some simple methods (base64 encoding, etc)
+I hope this code can merge into oauth2client.  oauth2client.crypt currently expects openssl, but there's a fair amount of overlap on some simple methods (base64 encoding, etc).  There's an acknowledged feature request here: http://code.google.com/p/google-api-python-client/issues/detail?id=184
 
 AppEngine
 ------
-Yes, this works on AppEngine, but there's a bug on dev_appserver.py that prevents this from working on dev:
-http://code.google.com/p/googleappengine/issues/detail?id=7998
+View a sample using the Drive V2 API here: https://pycrypt.appspot.com/
 
 Requirements
 ------
 * PyCrypto >= 2.6
-* AppEngine SDK >= 1.7.1
+* AppEngine SDK >= 1.7.3
 
 Preliminary Setup
 ------
@@ -51,7 +50,7 @@ Console Use
 import httplib2
 from apiclient.discovery import build
 
-from AppEngineSignedJWT import PyCryptoSignedJwtAssertionCredentials
+from PyCryptoSignedJWT import PyCryptoSignedJwtAssertionCredentials
 
 KEY = "privatekey.pem"
 SCOPES = ["https://www.googleapis.com/auth/drive"]
